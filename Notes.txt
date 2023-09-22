@@ -1,4 +1,7 @@
-Do learning interventions work? In relation to variables 
+Do learning interventions work? In relation to variables
+Test if one topic works better than another?
+Test responses based on major?
+Test responses based on school year?
 
 meausre variables: learning (include behavior), security anxiety, motivation
 random assign: intervention, no intervention (videos)
@@ -10,7 +13,7 @@ Random assignment to experimental condition: Experimental, control
 To do:
 Research methods to measure variables.
 Find two topics to focus on.
-Find short, informative videos?
+Find short, informative videos
 
 After thoughts:
 Will this survey be too much/too long for the average college student?
