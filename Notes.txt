@@ -1,20 +1,18 @@
-Do learning interventions work? In relation to variables
-Test if one topic works better than another?
-Test responses based on major?
-Test responses based on school year?
+Are personalized lessons more effective at increasing security awareness in comparison to educational videos?
 
 meausre variables: learning (include behavior), security anxiety, motivation
-random assign: intervention, no intervention (videos)
+random assign: intervention (lessons), no intervention (videos)
 meausre variables: learning (include behavior), security anxiety, motivation
 
 Pre-test post-test 
-Random assignment to experimental condition: Experimental, control
+Random assignment to experimental condition: Experimental (personalized lesson), control (videos)
 
 To do:
 Research methods to measure variables.
-Find two topics to focus on.
 Find short, informative videos
+Come up with the best "tree" based on responses
 
 After thoughts:
 Will this survey be too much/too long for the average college student?
-Request to be extra credit for students in psych courses?
+Request to be extra credit for students in psych courses? POSSIBLE
+
