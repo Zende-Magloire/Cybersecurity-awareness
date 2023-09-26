@@ -10,7 +10,9 @@ Random assignment to experimental condition: Experimental (personalized lesson),
 To do:
 Research methods to measure variables.
 Find short, informative videos
-Come up with the best "tree" based on responses
+Come up with the best "tree" based on responses:
+-Short lesson after every wrong answer
+-At the end of each topic, play a video if user got most questions wrong
 
 After thoughts:
 Will this survey be too much/too long for the average college student?
