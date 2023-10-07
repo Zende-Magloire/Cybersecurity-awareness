@@ -1,19 +1,27 @@
 Are personalized lessons more effective at increasing security awareness in comparison to educational videos?
 
-meausre variables: learning (include behavior), security anxiety, motivation
+measure variables: learning (include behavior), security anxiety, motivation
 random assign: intervention (lessons), no intervention (videos)
-meausre variables: learning (include behavior), security anxiety, motivation
+measure variables: learning (include behavior), security anxiety, motivation
 
 Pre-test post-test 
 Random assignment to experimental condition: Experimental (personalized lesson), control (videos)
 
 To do:
-Research methods to measure variables.
-Research most important security awareness topics
-Find short, informative videos
-Come up with the best "tree" based on responses:
--Short lesson after every wrong answer
--At the end of each topic, play a video if user got most questions wrong
+1. Research methods to measure variables.
+-----Try to find previous research, see how much chat can do
+2. Research most important security awareness topics
+-----Prompt chat to decide on topics, compare with previous research
+*Use chat gpt to produce test cases to measure behavior*
+3. Create pre-test questions:
+-----Prompt chat to come up with questions based on topics decided on (20?)
+4. Come up with the best "tree" based on responses (30?)
+-----Prompt chat to create personalized lesson based on the topics and progress based on user response (actively)
+-----Prompt chat to create a short lesson after every wrong answer(specific to the wrong answer)
+5. Create post-test questions (20)
+-----Prompt chat to come up with essentially the same questions presented in a different way
+6. Find short, informative videos
+-----Find videos that educate on those topics
 
 After thoughts:
 Will this survey be too much/too long for the average college student?

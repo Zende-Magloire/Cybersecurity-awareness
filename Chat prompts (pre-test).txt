@@ -1,0 +1,199 @@
+Chat-GPT prompts and answer snippets
+
+Prompt: What are the top 5 cybersecurity attacks that college students fall for?
+Answer:
+1. Phishing attacks
+2. Social Engineering Attacks
+3. Malware Infections
+4. Wi-Fi Network Exploitation
+5. Password Security Issues
+
+Prompt: What are the top 5 topics that they should be educated on to protect themselves from these attacks?
+Answer:
+1. Phishing Awareness
+2. Password Security
+3. Social Engineering
+4. Safe Internet Use
+5. Data Privacy and Social Media Awareness
+
+----------------------------PASSWORD SECURITY----------------------------
+Prompt: Which of these would be the best topic for an individual to use as a base to begin to improve their cybersecurity awareness?
+Answer: Among the topics I mentioned, "Password Security" is often the best place for an individual to begin because it forms the foundation
+of many other cybersecurity practices.
+
+Prompt: Generate 4 multiple-choice questions that would give insight into how much knowledge a person has about password security as well as an
+idea of their current password creation processes/behaviors.
+Answer:
+Which of the following is considered a strong password?
+a) Password123
+b) P@ssw0rd!
+c) MyDog'sName
+d) 12345678
+
+What is the primary purpose of using a password manager?
+a) To generate and store complex passwords securely
+b) To share passwords with friends and family
+c) To reset forgotten passwords
+d) To access the internet
+
+Which of the following is a secure way to share a password with a trusted friend or family member?
+a) Email the password to them
+b) Send the password via a private message on social media
+c) Tell them the password over a phone call
+d) Use a secure password sharing feature in a reputable password manager
+
+Which of the following is a good practice for creating unique passwords for multiple accounts?
+a) Use the same password for all accounts to avoid forgetting them
+b) Create passwords based on easily memorable information like birthdays
+c) Use a passphrase made up of random words, numbers, and symbols
+d) Write passwords on sticky notes and attach them to your computer
+
+Answers:
+
+b) P@ssw0rd!
+a) To generate and store complex passwords securely
+d) Use a secure password sharing feature in a reputable password manager
+c) Use a passphrase made up of random words, numbers, and symbols
+
+----------------------------PHISHING AWARENESS----------------------------
+Prompt: Which of the previously mentioned topics would be the next best for an individual to continue to improve their
+cybersecurity awareness?
+Answer: After addressing password security as a foundational topic, the next best area for an individual to focus on to continue
+improving their cybersecurity awareness is Phishing Awareness.
+
+Prompt: Generate 4 multiple-choice questions that would give insight into how much knowledge a person has about phishing
+as well as an idea of how susceptible they are to phishing attacks based on their current behaviours.
+Answer:
+Which of the following is a common tactic used in phishing emails?
+a) Including the sender's real name and contact information
+b) Using an official email address from a reputable organization
+c) Urgently requesting personal information or login credentials
+d) Offering free software downloads
+
+You receive an email claiming you've won a lottery you didn't enter. To claim your prize, it asks for your bank account details.
+What should you do?
+a) Provide your bank account details to claim the prize
+b) Delete the email and report it as phishing
+c) Forward the email to friends for their opinion
+d) Reply to the email with a request for more information
+
+What's a common way to verify the legitimacy of an email claiming to be from a trusted organization?
+a) Click on the links within the email to see where they lead
+b) Call the phone number provided in the email to confirm
+c) Check the email's sender address and domain for authenticity
+d) Reply to the email with personal information to confirm your identity
+
+What is one of the best practices to prevent falling victim to a phishing attack?
+a) Always click on links in emails to confirm their authenticity
+b) Share personal information when requested to establish trust
+c) Avoid opening any email attachments to stay safe
+d) Verify the sender's identity and contact the organization directly to confirm the request
+
+Answers:
+
+c) Urgently requesting personal information or login credentials
+b) Delete the email and report it as phishing
+c) Check the email's sender address and domain for authenticity
+d) Verify the sender's identity and contact the organization directly to confirm the request
+
+----------------------------SAFE INTERNET USE----------------------------
+Which of the following actions is NOT recommended for safe internet use?
+a) Clicking on pop-up ads to see what they offer
+b) Avoiding the use of public Wi-Fi for sensitive transactions
+c) Keeping software and operating systems up to date
+d) Being cautious when downloading files from unfamiliar websites
+
+Which of the following is a potential risk of using public Wi-Fi networks without protection?
+a) Faster internet speeds
+b) Increased device performance
+c) Exposure of sensitive data to cybercriminals
+d) Better website accessibility
+
+You're using public Wi-Fi at a café to access your email and social media accounts. What should you do to enhance security?
+a) Share your login credentials to access Wi-Fi with others
+b) Use a virtual private network (VPN) to encrypt your internet connection
+c) Keep your device's firewall turned off
+d) Disable your device's password and screen lock for convenience
+
+Which of the following is a sign of a secure website while shopping online?
+a) The website address starts with "http://" instead of "https://"
+b) There's no padlock icon next to the website address in the browser
+c) The website has a contact form to submit credit card information
+d) The website displays a green padlock icon and "https://" in the address bar
+
+Answers:
+
+a) Clicking on pop-up ads to see what they offer
+c) Exposure of sensitive data to cybercriminals
+b) Use a virtual private network (VPN) to encrypt your internet connection
+d) The website displays a green padlock icon and "https://" in the address bar
+
+----------------------------SOCIAL ENGINEERING----------------------------
+What is social engineering in the context of cybersecurity?
+a) A type of advanced malware
+b) A technique to hack into social media accounts
+c) The use of psychological manipulation to deceive individuals
+d) A way to bypass network firewalls
+
+You receive a phone call from someone claiming to be a tech support agent from a well-known company, who asks for remote access to your computer to fix an issue. What should you do?
+a) Provide remote access as requested to resolve the issue quickly
+b) Ask for their official company email address to verify their identity
+c) Decline the request and hang up, then call the company's official support line to verify the call
+d) Request their personal information before granting access
+
+Which of the following is a red flag indicating a potential social engineering attempt via email?
+a) The email is from a recognized organization
+b) The email asks you to click on a link to verify your account immediately
+c) The email has proper spelling and grammar
+d) The email includes a friendly greeting and your name
+
+You receive a message on social media from a new contact who claims to be a colleague from work. They ask for sensitive work-related information. What should you do?
+a) Share the requested information to help the colleague
+b) Ignore the message; it's probably a spam account
+c) Reply and ask for more details to confirm their identity
+d) Contact your HR department to verify the request
+
+Answers:
+
+c) The use of psychological manipulation to deceive individuals
+c) Decline the request and hang up, then call the company's official support line to verify the call
+b) The email asks you to click on a link to verify your account immediately
+d) Contact your HR department to verify the request
+
+----------------------------DATA PRIVACY----------------------------
+Which of the following actions is a potential threat to your data privacy on social media platforms?
+a) Regularly reviewing and updating your privacy settings
+b) Sharing your vacation plans and location in real-time
+c) Using strong, unique passwords for your social media accounts
+d) Ignoring friend requests from unknown individuals
+
+What should you do with old smartphones or devices before disposing of them?
+a) Sell them online to get some extra cash
+b) Donate them to charity organizations
+c) Perform a factory reset to erase all personal data
+d) Throw them in the trash without any precautions
+
+What's a common privacy practice when using public computers, such as those in libraries or internet cafes?
+a) Save your login credentials for convenience
+b) Log out of all accounts and clear browsing history after use
+c) Share your browsing history with others to help them find interesting websites
+d) Use the same password across different accounts to avoid confusion
+
+What is the purpose of a privacy policy on a website or app?
+a) To provide information on the company's profits
+b) To explain how user data is collected, used, and protected
+c) To display customer reviews and testimonials
+d) To showcase the website's design and layout
+
+Answers:
+
+b) Sharing your vacation plans and location in real-time
+c) Perform a factory reset to erase all personal data
+b) Delete the email and mark it as spam
+b) Log out of all accounts and clear browsing history after use
+
+
+
+
+
+
