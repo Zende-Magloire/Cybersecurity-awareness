@@ -1,0 +1,163 @@
+Prompt: After students have received education on these topics, which one would be good to begin with for assessing if
+their awareness has increased or habits have improved?
+Answer: To assess if students' cybersecurity awareness has increased or if their habits have improved after receiving
+education, it's a good idea to begin with Phishing Awareness.
+
+----------------------------PHISHING AWARENESS----------------------------
+Prompt: Generate 4 questions that can be used to assess whether individuals' knowledge on phishing has improved or if they
+can avoid phishing attacks based on their hypothetical predicted behavior.
+Answer:
+You receive an email from your bank asking you to verify your account details by clicking on a link. What would you do?
+a) Click on the link and provide your account details as requested
+b) Forward the email to your friends to see if they think it's legitimate
+c) Delete the email and contact your bank using their official website or phone number
+
+You receive a message on a social media platform from a friend, claiming to have lost their phone and needing your email
+login credentials to access their email. What should you do?
+a) Share your email login credentials with your friend to help them
+b) Ignore the message and block the sender
+c) Reply and ask your friend to confirm their identity in another way
+
+You receive an unsolicited email offering a "limited-time" opportunity to win a free iPhone by clicking on a link and
+providing personal information. What's your response?
+a) Click on the link to claim the iPhone prize
+b) Report the email as spam and delete it immediately
+c) Reply to the email with your personal information to enter the contest
+
+You receive an urgent email from your company's IT department, requesting your username and password to address a
+security issue. What action would you take?
+a) Share your login credentials as requested to help IT resolve the issue
+b) Verify the email's authenticity by contacting IT through an official channel
+c) Forward the email to coworkers to see if they received a similar message
+
+Answers:
+
+c) Delete the email and contact your bank using their official website or phone number
+b) Ignore the message and block the sender
+b) Report the email as spam and delete it immediately
+b) Verify the email's authenticity by contacting IT through an official channel
+
+----------------------------SAFE INTERNET USE----------------------------
+6. You're browsing the internet and come across a website that offers free, downloadable software without any apparent fees or catches. What should you consider before downloading and installing this software?
+a) Download and install the software right away since it's free
+b) Check for user reviews and ratings to assess the software's legitimacy
+c) Share the download link with friends before downloading to get their opinions
+
+While browsing, you come across a website that asks for your credit card information to access its content. What should
+you do?
+a) Close the website immediately and avoid entering any personal information
+b) Provide your credit card information to access the content
+c) Share your credit card information only if the website appears trustworthy
+
+You receive a friend request on a social media platform from an unfamiliar profile with a very limited number of connections.
+What's your action?
+a) Accept the friend request to connect with new people
+b) Message the sender to ask how they found you
+c) Decline the friend request and review your privacy settings
+
+4. You want to strengthen the security of your online accounts. Which of the following practices is an effective way to
+enhance your account security?
+a) Using the same password for all your accounts to simplify login
+b) Enabling multi-factor authentication (MFA) wherever possible
+c) Sharing your login credentials with a trusted friend for backup
+
+Answers:
+
+b) Check for user reviews and ratings to assess the software's legitimacy
+a) Close the website immediately and avoid entering any personal information
+c) Decline the friend request and review your privacy settings
+b) Enabling multi-factor authentication (MFA) wherever possible
+
+----------------------------SOCIAL ENGINEERING----------------------------
+You receive a phone call from an unknown number, and the caller claims to be from your bank, asking for your account
+details to verify a recent transaction. What would you do?
+a) Provide your account details to verify the transaction
+b) Hang up the call and call your bank using the official phone number to verify the request
+c) Ask the caller for their personal information to confirm their identity
+
+You receive an email from a colleague, urgently requesting that you transfer a large sum of money to a specific account.
+What should be your immediate response?
+a) Initiate the money transfer as requested
+b) Reply to the email to confirm the details of the transaction
+c) Contact your colleague through a known, separate communication channel to verify the request
+
+While browsing online, you come across a website offering a "free" product but requesting your credit card information for
+shipping fees. How would you react?
+a) Provide your credit card information to claim the free product
+b) Ignore the offer and continue browsing
+c) Close the website without entering any personal information
+
+You receive a message on social media from a friend, claiming they're stranded in a foreign country and urgently need you to
+wire money. How would you respond?
+a) Immediately transfer the money to help your friend
+b) Ask your friend for more details and verify their identity through mutual contacts
+c) Ignore the message and assume it's a scam
+
+Answers:
+
+b) Hang up the call and call your bank using the official phone number to verify the request
+c) Contact your colleague through a known, separate communication channel to verify the request
+c) Close the website without entering any personal information
+b) Ask your friend for more details and verify their identity through mutual contacts
+
+----------------------------DATA PRIVACY----------------------------
+You receive an email from an online retailer offering a discount on your favorite products, but they ask for your home address
+and phone number. What's your response?
+a) Provide the requested information to avail of the discount
+b) Delete the email and refrain from sharing personal details
+c) Reply to the email with your information to confirm your identity
+
+You want to install a new mobile app that requests access to your location, contacts, and camera. What should you do before
+granting these permissions?
+a) Grant all requested permissions to ensure the app works correctly
+b) Review the app's privacy settings and grant permissions selectively
+c) Deny all permissions to protect your privacy
+
+You receive a call from someone claiming to be conducting a survey and asking for your Social Security number. How would you
+handle the situation?
+a) Provide your Social Security number for the survey
+b) Politely decline and hang up, as it's inappropriate to share such sensitive information
+c) Ask for the caller's Social Security number in return
+
+You're disposing of an old computer that contains personal files and sensitive documents. What should you do before getting
+rid of it?
+a) Simply delete all files and recycle the computer
+b) Use a data wiping tool to securely erase all data from the device
+c) Donate the computer to a local charity without any precautions
+
+Answers:
+
+b) Delete the email and refrain from sharing personal details
+b) Review the app's privacy settings and grant permissions selectively
+b) Politely decline and hang up, as it's inappropriate to share such sensitive information
+b) Use a data wiping tool to securely erase all data from the device
+
+----------------------------PASSWORD SECURITY----------------------------
+You receive an email from a popular online retailer, asking you to reset your password by clicking on a link. What should you do?
+a) Click on the link and reset your password immediately
+b) Ignore the email, as it's likely a phishing attempt
+c) Reply to the email and ask for more information before taking any action
+
+You're creating a new password for your email account. Which of the following would make the strongest password?
+a) Your birthdate
+b) "Password123"
+c) "D0g$L0v3r#2023"
+
+You receive a text message with a one-time code for logging into your bank account. What should you do if you didn't request this code?
+a) Enter the code immediately to see what it's for
+b) Ignore the code; it's probably a mistake or a phishing attempt
+c) Reply to the text message and ask who sent it
+
+You notice that a colleague has written their password on a sticky note and placed it on their computer monitor. What would you do?
+a) Use the password if needed, as it's accessible
+b) Ignore the sticky note and inform your colleague about the security risk
+c) Share the password with other colleagues for convenience
+
+Answers:
+
+b) Ignore the email, as it's likely a phishing attempt
+c) "D0g$L0v3r#2023"
+b) Ignore the code; it's probably a mistake or a phishing attempt
+b) Ignore the sticky note and inform your colleague about the security risk
+
+

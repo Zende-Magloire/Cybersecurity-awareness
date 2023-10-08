@@ -135,7 +135,8 @@ b) A technique to hack into social media accounts
 c) The use of psychological manipulation to deceive individuals
 d) A way to bypass network firewalls
 
-You receive a phone call from someone claiming to be a tech support agent from a well-known company, who asks for remote access to your computer to fix an issue. What should you do?
+You receive a phone call from someone claiming to be a tech support agent from a well-known company, who asks for remote
+access to your computer to fix an issue. What should you do?
 a) Provide remote access as requested to resolve the issue quickly
 b) Ask for their official company email address to verify their identity
 c) Decline the request and hang up, then call the company's official support line to verify the call
@@ -147,7 +148,8 @@ b) The email asks you to click on a link to verify your account immediately
 c) The email has proper spelling and grammar
 d) The email includes a friendly greeting and your name
 
-You receive a message on social media from a new contact who claims to be a colleague from work. They ask for sensitive work-related information. What should you do?
+You receive a message on social media from a new contact who claims to be a colleague from work. They ask for sensitive
+work-related information. What should you do?
 a) Share the requested information to help the colleague
 b) Ignore the message; it's probably a spam account
 c) Reply and ask for more details to confirm their identity
