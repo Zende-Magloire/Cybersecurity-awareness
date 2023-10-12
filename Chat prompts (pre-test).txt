@@ -27,7 +27,7 @@ Answer:
 Which of the following is considered a strong password?
 a) Password123
 b) P@ssw0rd!
-c) MyDog'sName
+c) MyDogL0vesP@ssw0rd$!
 d) 12345678
 
 What is the primary purpose of using a password manager?
@@ -50,7 +50,7 @@ d) Write passwords on sticky notes and attach them to your computer
 
 Answers:
 
-b) P@ssw0rd!
+c) MyDogL0vesP@ssw0rd$!
 a) To generate and store complex passwords securely
 d) Use a secure password sharing feature in a reputable password manager
 c) Use a passphrase made up of random words, numbers, and symbols
