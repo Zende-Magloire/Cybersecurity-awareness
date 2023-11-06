@@ -7,6 +7,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 correct_1 = 0
 questions_1 = 0
+valid_choices = ["A", "B", "C", "D"]
 
 while correct_1 < 3 or questions_1 < 5:
     response = openai.ChatCompletion.create(
@@ -24,8 +25,10 @@ while correct_1 < 3 or questions_1 < 5:
         presence_penalty=0
     )
     assistant_response = response['choices'][0]['message']['content']
-    print(assistant_response)
-    user_answer = input("Please enter your answer choice (A, B, C or D): ")
+    print("\n" + assistant_response)
+    user_answer = ""
+    while user_answer not in valid_choices:
+        user_answer = input("Please enter your answer choice (A, B, C or D): ").upper()
     print("You entered:", user_answer)
 
     response = openai.ChatCompletion.create(
@@ -46,14 +49,14 @@ while correct_1 < 3 or questions_1 < 5:
         frequency_penalty=0,
         presence_penalty=0
     )
+    questions_1 += 1
     assistant_response = response['choices'][0]['message']['content']
-    print(assistant_response)
+    print("\n" + assistant_response)
 
     if "correct" in assistant_response.lower():
         correct_1 += 1
-        questions_1 += 1
 
-if correct_1 == 3():
-    print("Congratulations! You have passed level 1.")
-elif questions_1 == 5():
-    print("You have answered " + user_answer + "/5 questions correctly. Let's move on to a new topic.")
+if correct_1 == 3:
+    print("\nCongratulations! You answered " + correct_1 + "/" + questions_1 + " correctly. You have passed level 1.")
+elif questions_1 == 5:
+    print("\nYou have answered " + correct_1 + "/5 questions correctly. Let's move on to a new topic.")
