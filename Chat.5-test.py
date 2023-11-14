@@ -69,10 +69,10 @@ def ask_question(topic):
     return correct, questions
 
 topics = [
-    "phishing awareness",
     "password security",
-    "social engineering",
+    "phishing awareness",
     "safe internet use",
+    "social engineering",
     "data privacy and social media awareness"
 ]
 
