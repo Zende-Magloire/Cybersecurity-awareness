@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Page</title>
+</head>
+<body>
+    <h1>Question {{ question_number }}</h1>
+    <form action="/question/{{ topic_id }}/{{ question_number }}" method="post">
+        <!-- Display the question from the backend here -->
+        <p>{{ question_text }}</p>
+        
+        <!-- Display answer choices as radio buttons -->
+        <label><input type="radio" name="user_answer" value="A"> A</label>
+        <label><input type="radio" name="user_answer" value="B"> B</label>
+        <label><input type="radio" name="user_answer" value="C"> C</label>
+        <label><input type="radio" name="user_answer" value="D"> D</label>
+        
+        <button type="submit">Next</button>
+    </form>
+</body>
+</html>
