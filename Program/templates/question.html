@@ -11,7 +11,6 @@
         <!-- Display the question from the backend here -->
         <p>{{ question_text }}</p>
         
-        <!-- Display answer choices as radio buttons -->
         <label><input type="radio" name="user_answer" value="A"> A</label>
         <label><input type="radio" name="user_answer" value="B"> B</label>
         <label><input type="radio" name="user_answer" value="C"> C</label>
@@ -19,5 +18,9 @@
         
         <button type="submit">Next</button>
     </form>
+     <!-- Display the feedback -->
+    {% if feedback %}
+        <p>Feedback: {{ feedback }}</p>
+    {% endif %}
 </body>
 </html>
