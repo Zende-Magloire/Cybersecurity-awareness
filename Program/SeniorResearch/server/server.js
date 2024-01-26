@@ -25,37 +25,41 @@ const topics = [
   let questions = 0;
   let completedTopics = 0;
 
-const chat_gpt_question = async() => {
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: `You are a cybersecurity specialist educating college students on cybersecurity awareness. Let's begin by asking the user a multiple-choice question (answer choices: A, B, C, D) on the topic of ${topics[completedTopics]}`,
-        },
-      ],
-      temperature: 0.5,
-      max_tokens: 1000,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
-
-    const assistantResponse = response.choices[0].message.content;
-    console.log("\n" + assistantResponse);
-    return assistantResponse
+  const chat_gpt_question = async () => {
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: `You are a cybersecurity specialist educating college students on cybersecurity awareness. Let's begin by asking the user a multiple-choice question (answer choices: A, B, C, D) on the topic of ${topics[completedTopics]}`,
+          },
+        ],
+        temperature: 0.5,
+        max_tokens: 1000,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      });
+  
+      const assistantResponse = response.choices[0].message.content;
+      console.log("\n" + assistantResponse);
+      return assistantResponse;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Internal Server Error');
+    }
   }
-    catch (error) {
+  
+  app.get('/ask', async (req, res) => {
+    try {
+      const response = await chat_gpt_question();
+      res.json({ assistantResponse: response });
+    } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-}
-  
-app.get('/ask', async (req, res) => {
-  //console.log("I have been hit")
-  console.log(req.body)
-  });
+  });  
     
 app.post('/feedback', async (req, res) => {
       try{
@@ -80,7 +84,7 @@ app.post('/feedback', async (req, res) => {
 
       questions += 1;
       const newAssistantResponse = userResponse.choices[0].message.content;
-      console.log("\n" + newAssistantResponse);
+        console.log("\n" + newAssistantResponse);
 
       if (!newAssistantResponse.toLowerCase().includes("wrong") && !newAssistantResponse.toLowerCase().includes("incorrect")) {
         correct += 1;
