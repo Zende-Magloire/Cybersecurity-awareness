@@ -43,9 +43,8 @@ const chat_gpt_question = async () => {
       presence_penalty: 0,
     });
 
-    questions += 1;
     const assistantResponse = response.choices[0].message.content;
-    console.log("\n" + assistantResponse, "CALLED here");
+    console.log("\n" + assistantResponse);
     return assistantResponse;
   } catch (error) {
     console.error(error);
@@ -88,6 +87,7 @@ app.post("/feedback", async (req, res) => {
 
     const newAssistantResponse = userResponse.choices[0].message.content;
     console.log("\n" + newAssistantResponse);
+    questions += 1;
 
     if (
       !newAssistantResponse.toLowerCase().includes("wrong") &&
@@ -95,12 +95,19 @@ app.post("/feedback", async (req, res) => {
     ) {
       correct += 1;
     }
-    console.log(correct, "Correct answer");
 
     if (correct === 3 || questions === 5) {
       completedTopics += 1;
     }
+
     res.json({ newAssistantResponse, correct, questions });
+
+    if (correct === 3 || questions === 5) {
+      correct = 0
+      questions = 0
+    }
+    console.log("leveled up", correct, questions)
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -126,7 +133,6 @@ const new_chat_gpt_question = async (userAnswer, assistantResponses) => {
       presence_penalty: 0,
     });
 
-    questions += 1;
     const assistantResponse = response.choices[0].message.content;
     console.log("\n" + assistantResponse);
     return assistantResponse;

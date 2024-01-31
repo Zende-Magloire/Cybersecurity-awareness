@@ -121,20 +121,26 @@ const Form = () => {
 
   return (
     <div>
-      {passed && <p>Hurray! You passed level one!</p>}
       <form>
-        <label>
-          ID:
-          <input
-            type="text"
-            name="ID"
-            value={data}
-            onChange={(e) => setData(e.target.value)}
-          />
-        </label>
-        <input type="submit" onClick={submitId} />
+        {IdSubmitted ? (
+          <p>Logged in as: {data}</p>
+        ) : (
+          <>
+            <label>
+              ID:
+              <input
+                type="text"
+                name="ID"
+                value={data}
+                onChange={(e) => setData(e.target.value)}
+              />
+            </label>
+            <input type="submit" onClick={submitId} />
+          </>
+        )}
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
+      {passed && <p>Hurray! You passed the level!</p>}
       {question && <p>{question}</p>}
       {options.length > 0 && (
         <Select
