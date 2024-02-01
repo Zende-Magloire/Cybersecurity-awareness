@@ -32,6 +32,7 @@ const Form = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/feedback", {
+        userId: data,
         question: question,
         answer: selectedOption.label,
       });
@@ -39,8 +40,6 @@ const Form = () => {
       setFeedback(response?.data?.newAssistantResponse);
       setCorrect(response?.data.correct);
       setQuestions(response?.data.questions);
-
-      // Fetch a new question after the user provides an answer\
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while sending data.");
@@ -112,10 +111,19 @@ const Form = () => {
       setError("An error occurred while sending data.");
     }
   };
-  const submitId = (e) => {
+
+  const submitId = async (e) => {
     e.preventDefault();
     if (data) {
-      setIdSubmitted(true);
+      try {
+        await axios.post("http://localhost:3000/start", null, {
+          headers: { userid: data },
+        });
+        setIdSubmitted(true);
+      } catch (error) {
+        console.error("Error:", error);
+        setError("An error occurred while submitting ID.");
+      }
     }
   };
 

@@ -1,5 +1,6 @@
 const cors = require("cors");
 const express = require("express");
+const mongoose = require("mongoose");
 require("dotenv").config();
 const Api_key = process.env.OPENAI_API_KEY;
 const OpenAIAPI = require("openai");
@@ -11,6 +12,20 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
+
+mongoose.connect("mongodb://localhost:27017/cybersecurity_quiz", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const userQuizResultSchema = new mongoose.Schema({
+  userId: String,
+  correct: Number,
+  questions: Number,
+  topic: String,
+});
+
+const UserQuizResult = mongoose.model("UserQuizResult", userQuizResultSchema);
 
 const topics = [
   "password security",
@@ -65,6 +80,10 @@ app.get("/ask", async (req, res) => {
 app.post("/feedback", async (req, res) => {
   console.log(req.body, "feedback");
   try {
+    const { question, answer } = req.body;
+
+    const userId = req.headers.userId;
+
     const userResponse = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
@@ -100,14 +119,22 @@ app.post("/feedback", async (req, res) => {
       completedTopics += 1;
     }
 
+    const result = new UserQuizResult({
+      userId,
+      correct,
+      questions,
+      topic: topics[completedTopics],
+    });
+
+    await result.save();
+
     res.json({ newAssistantResponse, correct, questions });
 
     if (correct === 3 || questions === 5) {
-      correct = 0
-      questions = 0
+      correct = 0;
+      questions = 0;
     }
-    console.log("leveled up", correct, questions)
-    
+    console.log("leveled up", correct, questions);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -159,6 +186,7 @@ app.post("/ask_new", async (req, res) => {
 
 app.post("/start", (req, res) => {
   console.log("Test");
+  console.log("Received ID:", req.headers.userId); // Log the received ID
   askQuestion(topics[completedTopics]);
   res.json({ message: "Server started" });
 });
