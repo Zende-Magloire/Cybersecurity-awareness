@@ -113,11 +113,12 @@ const Form = () => {
   };
 
   const submitId = async (e) => {
+    console.log(data)
     e.preventDefault();
     if (data) {
       try {
-        await axios.post("http://localhost:3000/start", null, {
-          headers: { userid: data },
+        await axios.post("http://localhost:3000/start",{
+          userId: data
         });
         setIdSubmitted(true);
       } catch (error) {

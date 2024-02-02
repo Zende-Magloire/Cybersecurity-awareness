@@ -10,12 +10,22 @@ const openai = new OpenAIAPI({
 
 const app = express();
 const port = process.env.PORT || 3000;
+const { User,Question,Topic } = require('./model/Schema'); 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/cybersecurity_quiz", {
+mongoose.connect("mongodb+srv://zen:SfsiyJY1Sc8h1RGC@cluster0.p4zw6be.mongodb.net/?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+});
+
+const db = mongoose.connection
+
+db.on("error", (err) => {
+  console.log(err);
+});
+db.once("open", () => {
+  console.log("DB started successfully")
 });
 
 const userQuizResultSchema = new mongoose.Schema({
@@ -82,8 +92,6 @@ app.post("/feedback", async (req, res) => {
   try {
     const { question, answer } = req.body;
 
-    const userId = req.headers.userId;
-
     const userResponse = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
@@ -104,9 +112,53 @@ app.post("/feedback", async (req, res) => {
       presence_penalty: 0,
     });
 
+
     const newAssistantResponse = userResponse.choices[0].message.content;
     console.log("\n" + newAssistantResponse);
     questions += 1;
+
+    // Check if the topic already exists in the database
+    const existingTopic = await Topic.findOne({ name: topics[completedTopics] });
+
+    const topicToUse = existingTopic ? existingTopic : createNewTopic(topics[completedTopics]);
+
+    const newQuestion = new Question({
+      text: question,
+    });
+
+    const savedQuestion = await newQuestion.save();
+    console.log('Question saved:', savedQuestion);
+
+      // If the topic was created, save the new question to it
+      if (!existingTopic) {
+        topicToUse.questions.push(savedQuestion);
+        await topicToUse.save();
+        console.log('Topic saved:', topicToUse);
+    }
+    
+    const user = await User.findOne({ username: req.body.userId });
+
+    // Find the index of the topic in user's topicsPerformance array
+    const topicIndex = user.topicsPerformance.findIndex(
+      (tp) => tp.topic.toString() === topicToUse._id.toString()
+    );
+
+    if (topicIndex !== -1) {
+      // If the topic already exists in user's topicsPerformance, update it
+      user.topicsPerformance[topicIndex].correctAnswers += 1;
+      user.topicsPerformance[topicIndex].totalQuestionsAnswered += 1;
+    } else {
+      // If the topic is not in user's topicsPerformance, add it
+      user.topicsPerformance.push({
+        topic: topicToUse._id,
+        correctAnswers: correct,
+        totalQuestionsAnswered: questions
+      });
+    }
+     // Save the updated user document
+     await user.save();
+
+
 
     if (
       !newAssistantResponse.toLowerCase().includes("wrong") &&
@@ -119,14 +171,7 @@ app.post("/feedback", async (req, res) => {
       completedTopics += 1;
     }
 
-    const result = new UserQuizResult({
-      userId,
-      correct,
-      questions,
-      topic: topics[completedTopics],
-    });
 
-    await result.save();
 
     res.json({ newAssistantResponse, correct, questions });
 
@@ -184,11 +229,52 @@ app.post("/ask_new", async (req, res) => {
   }
 });
 
-app.post("/start", (req, res) => {
-  console.log("Test");
-  console.log("Received ID:", req.headers.userId); // Log the received ID
-  askQuestion(topics[completedTopics]);
-  res.json({ message: "Server started" });
+app.post("/start", async(req, res) => {
+  try {
+    const userId = req.body.userId;
+    const existingUser = await User.findOne({ username: userId });
+
+    if (existingUser) {
+      // User already exists, update the user
+      console.log('User already exists. Updating user...');
+
+      // You may want to update user data here if needed
+      // For example, update the topicsPerformance array or other user information
+
+      res.json({ message: 'User updated' });
+    } else {
+      // User does not exist, create a new user
+      console.log('User does not exist. Creating new user...');
+
+      // Example: Creating a new topic with questions
+      const newTopic = new Topic({
+        name: topics[0],
+        questions: [], // Add questions if needed
+      });
+
+      const savedTopic = await newTopic.save();
+
+      // Creating a new user
+      const newUser = new User({
+        username: userId,
+        topicsPerformance: [
+          {
+            topic: savedTopic._id,
+            correctAnswers: 0,
+            totalQuestionsAnswered: 0,
+          },
+        ],
+      });
+
+      const savedUser = await newUser.save();
+      console.log('User created:', savedUser);
+
+      res.json({ message: 'User created' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 //test
