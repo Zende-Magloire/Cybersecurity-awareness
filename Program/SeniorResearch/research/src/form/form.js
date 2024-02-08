@@ -36,7 +36,8 @@ const Form = () => {
         question: question,
         answer: selectedOption.label,
       });
-      console.log(response.data);
+      console.log(selectedOption,"SelectionOption")
+      console.log(response.data, "dataFeedback");
       setFeedback(response?.data?.newAssistantResponse);
       setCorrect(response?.data.correct);
       setQuestions(response?.data.questions);

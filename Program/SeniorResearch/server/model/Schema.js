@@ -8,6 +8,7 @@ const questionSchema = new mongoose.Schema({
 
 // Schema for Topics
 const topicSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, required: true, unique: true },
   questions: [questionSchema],
 });
