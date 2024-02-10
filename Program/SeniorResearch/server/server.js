@@ -70,7 +70,7 @@ const chat_gpt_question = async () => {
           content: `You are a cybersecurity specialist educating college students on cybersecurity 
             awareness. Let's begin by asking a multiple-choice question
             (answer choices: A, B, C, D) on the topic of ${topics[completedTopics]}.
-            Make answer ${correct_answer} the correct one, the others wrong.`,
+            Make answer choice ${correct_answer} the correct one, the others wrong.`,
         },
       ],
       temperature: 0.5,
@@ -145,6 +145,16 @@ async function updateUserTopicPerformance(userId, topicId, isCorrect) {
     if (isCorrect) {
       topicPerformance.correctAnswers++;
     }
+    if (topicPerformance.correctAnswers === 3 || topicPerformance.totalQuestionsAnswered === 5) {
+      completedTopics += 1;
+       // // correct = 0;
+      // questions = 0;
+      // console.log("leveled up", correct, questions);
+    }
+    if (completedTopics === 5)
+    {
+      //congratulate user
+      }
     console.log(topicPerformance, "findTopic2");
     await user.save();
     return topicPerformance.correctAnswers;
@@ -261,17 +271,8 @@ app.post("/feedback", async (req, res) => {
     //   console.log("You got it wrong")
     //  }
 
-    if (correctAnswers === 3 || questions === 5) {
-      completedTopics += 1;
-    }
-
     res.json({ newAssistantResponse, correctAnswers, questions });
 
-    if (correctAnswers === 3 || questions === 5) {
-      // // correct = 0;
-      // questions = 0;
-      // console.log("leveled up", correct, questions);
-    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -294,7 +295,7 @@ const new_chat_gpt_question = async (userAnswer, assistantResponses) => {
           role: "system",
           content: `${assistantResponses} Given that I answered this question with ${userAnswer}, 
             Generate a new multiple-choice question (answer choices: A, B, C, D)on ${topics[completedTopics]}
-            that will help increase my knowledge on the topic. Make answer ${correct_answer} the correct one, 
+            that will help increase my knowledge on the topic. Make answer choice ${correct_answer} the correct one, 
             the others wrong.`,
         },
       ],
