@@ -149,9 +149,9 @@ async function updateUserTopicPerformance(userId, topicId, isCorrect) {
       topicPerformance.totalQuestionsAnswered++;
       if (isCorrect) {
         topicPerformance.correctAnswers++;
-        if (topicPerformance.correctAnswers === 3 || topicPerformance.totalQuestionsAnswered === 5) {
-          user.completedTopics++; // Increment completedTopics for the user
-        }
+      }
+      if (topicPerformance.correctAnswers === 3 || topicPerformance.totalQuestionsAnswered === 5) {
+        user.completedTopics++; // Increment completedTopics for the user
       }
     }
 
