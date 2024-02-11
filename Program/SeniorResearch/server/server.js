@@ -49,11 +49,10 @@ const topics = [
 ];
 
 let questions = 0;
-let completedTopics = 0;
 let answers = ["A", "B", "C", "D"];
 let correct_answer = null;
 
-const chat_gpt_question = async () => {
+const chat_gpt_question = async () => { 
   try {
     const randomIndex = Math.floor(Math.random() * answers.length);
 
@@ -61,6 +60,7 @@ const chat_gpt_question = async () => {
 
     correct_answer = randomString;
     console.log(correct_answer);
+    completedTopics = 0;
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
@@ -91,7 +91,7 @@ const chat_gpt_question = async () => {
 
 app.get("/ask", async (req, res) => {
   try {
-    const response = await chat_gpt_question();
+    const response = await chat_gpt_question(req.query.userId); // Pass userId to the function
     res.json({ assistantResponse: response });
   } catch (error) {
     console.error(error);
@@ -99,63 +99,62 @@ app.get("/ask", async (req, res) => {
   }
 });
 
-const createNewTopic = async (topicName, userID) => {
-  console.log(userID, "userID HERE AND THERE");
+const createNewTopic = async (topicName, userId) => {
   try {
-    // Create a new topic document
-    const newTopic = new Topic({
-      userId: userID,
-      name: topicName,
-      questions: [],
-    });
+    // Find if a topic with the same name exists for the current user
+    let existingTopic = await Topic.findOne({ userId: userId, name: topicName });
 
-    // Save the new topic to the database
-    const savedTopic = await newTopic.save();
-    console.log("New topic created:", savedTopic);
-
-    return savedTopic;
+    if (existingTopic) {
+      // If the topic exists, return it or update it if necessary
+      console.log("Topic already exists for the user, updating...");
+      // Perform any necessary update here, if required
+      return existingTopic;
+    } else {
+      // If the topic doesn't exist, create a new one
+      console.log("Creating new topic...");
+      const newTopic = new Topic({
+        userId: userId, // Include userId when creating the new topic
+        name: topicName,
+        questions: [],
+      });
+      const savedTopic = await newTopic.save();
+      console.log("New topic created:", savedTopic);
+      return savedTopic;
+    }
   } catch (error) {
-    console.error("Error creating new topic:", error);
-    throw new Error("Failed to create new topic");
+    console.error("Error creating or updating topic:", error);
+    throw new Error("Failed to create or update topic");
   }
 };
 
 async function updateUserTopicPerformance(userId, topicId, isCorrect) {
   try {
-    console.log(userId, "userID");
+    // Find the user by userId
     const user = await User.findById(userId);
-    console.log(user, "user here  ", topicId, "topicId");
 
     let topicPerformance = user.topicsPerformance.find((tp) =>
       tp.topic.equals(topicId)
     );
 
     if (!topicPerformance) {
-      // Create new topic performance entry if it doesn't exist
+      // If topic performance doesn't exist, create a new one
       topicPerformance = {
         topic: topicId,
         totalQuestionsAnswered: 1,
         correctAnswers: isCorrect ? 1 : 0,
       };
       user.topicsPerformance.push(topicPerformance);
-    }
-    console.log(topicPerformance, "findTopic");
-
-    topicPerformance.totalQuestionsAnswered++;
-    if (isCorrect) {
-      topicPerformance.correctAnswers++;
-    }
-    if (topicPerformance.correctAnswers === 3 || topicPerformance.totalQuestionsAnswered === 5) {
-      completedTopics += 1;
-       // // correct = 0;
-      // questions = 0;
-      // console.log("leveled up", correct, questions);
-    }
-    if (completedTopics === 5)
-    {
-      //congratulate user
+    } else {
+      // If topic performance exists, update the counts
+      topicPerformance.totalQuestionsAnswered++;
+      if (isCorrect) {
+        topicPerformance.correctAnswers++;
+        if (topicPerformance.correctAnswers === 3 || topicPerformance.totalQuestionsAnswered === 5) {
+          user.completedTopics++; // Increment completedTopics for the user
+        }
       }
-    console.log(topicPerformance, "findTopic2");
+    }
+
     await user.save();
     return topicPerformance.correctAnswers;
   } catch (error) {
@@ -167,7 +166,7 @@ async function updateUserTopicPerformance(userId, topicId, isCorrect) {
 app.post("/feedback", async (req, res) => {
   console.log(req.body, "feedback");
   try {
-    const { question, answer } = req.body;
+    const { question, answer, userId } = req.body; // Extract userId from req.body
 
     const userResponse = await openai.chat.completions.create({
       model: "gpt-4",
@@ -192,27 +191,23 @@ app.post("/feedback", async (req, res) => {
     const newAssistantResponse = userResponse.choices[0].message.content;
     console.log("\n" + newAssistantResponse);
 
-    const currentDatabaseUser = await User.findOne({
-      username: req.body.userId,
-    });
-    console.log(currentDatabaseUser, "zende id");
+    // const currentDatabaseUser = await User.findOne({ _id: userId }); // Find user by ID
+    const currentDatabaseUser = await User.findOne({ username: userId });
+
+    console.log(currentDatabaseUser, "user id");
     let topicToUse = null;
-    // Check if the user exists
+
     if (currentDatabaseUser) {
-      // Find or create the topic for the user
-      const topicName = topics[completedTopics];
+      const topicName = topics[currentDatabaseUser.completedTopics];
       topicToUse = await Topic.findOne({
-        userId: currentDatabaseUser._id,
+        userId: currentDatabaseUser._id, // Associate topic with current user
         name: topicName,
       });
-      console.log(topicToUse, "topicToUse", topicName);
 
       if (!topicToUse) {
-        // If the topic doesn't exist, create a new topic for the user
         topicToUse = await createNewTopic(topicName, currentDatabaseUser._id);
       }
 
-      // Create a new question object
       const savedQuestion = new Question({
         text: question,
       });
@@ -220,67 +215,45 @@ app.post("/feedback", async (req, res) => {
       console.log("Question saved:", savedQuestion);
       console.log("topicToUse", topicToUse);
 
-      // Add the new question to the topic's questions array
       topicToUse.questions.push(savedQuestion);
 
-      // Save the updated topic back to the database
       await topicToUse.save();
       console.log("Topic saved:", topicToUse);
+
+      const user_answer = answer;
+      const isCorrect = user_answer.startsWith(correct_answer);
+      console.log(isCorrect, "isCorrect");
+
+      const correctAnswers = await updateUserTopicPerformance(
+        currentDatabaseUser._id,
+        topicToUse._id,
+        isCorrect
+      );
+      console.log("correctAnswer", correctAnswers);
+
+      res.json({ newAssistantResponse, correctAnswers });
     } else {
-      // Handle case where user doesn't exist
       console.error("User not found");
+      res.status(404).json({ error: "User not found" });
     }
-
-    const user_answer = req.body.answer;
-    const isCorrect = user_answer.startsWith(correct_answer);
-    console.log(isCorrect, "isCorrect");
-
-    const correctAnswers = await updateUserTopicPerformance(
-      currentDatabaseUser._id,
-      topicToUse._id,
-      isCorrect
-    );
-    console.log("correctAnswer", correctAnswers);
-
-    // // Find the index of the topic in user's topicsPerformance array
-    // const topicIndex = user.topicsPerformance.findIndex(
-    //   (tp) => tp.topic.toString() === topicToUse._id.toString()
-    // );
-
-    // if (topicIndex !== -1) {
-    //   // If the topic already exists in user's topicsPerformance, update it
-    //   user.topicsPerformance[topicIndex].correctAnswers += 1;
-    //   user.topicsPerformance[topicIndex].totalQuestionsAnswered += 1;
-    // } else {
-    //   // If the topic is not in user's topicsPerformance, add it
-    //   user.topicsPerformance.push({
-    //     topic: topicToUse._id,
-    //     correctAnswers: correct,
-    //     totalQuestionsAnswered: questions,
-    //   });
-    // }
-    // // Save the updated user document
-    // await user.save();
-
-    //   if (user_answer.startsWith(correct_answer)) {
-    //     correct += 1;
-    //     console.log("You got it correct")
-    //   }
-    //   else{
-    //     wrong += 1;
-    //   console.log("You got it wrong")
-    //  }
-
-    res.json({ newAssistantResponse, correctAnswers, questions });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-const new_chat_gpt_question = async (userAnswer, assistantResponses) => {
+
+const new_chat_gpt_question = async (userAnswer, assistantResponses, userId) => { 
   try {
+    // Retrieve the user from the database
+    console.log(userId)
+    const currentUser = await User.findOne({ username: userId });
+
+console.log("current",currentUser)
+    // Use the completed topics count to determine the current topic
+    const currentTopicIndex = currentUser.completedTopics;
+    const currentTopicName = topics[currentTopicIndex];
+    
     const randomIndex = Math.floor(Math.random() * answers.length);
 
     const randomString = answers[randomIndex];
@@ -294,7 +267,7 @@ const new_chat_gpt_question = async (userAnswer, assistantResponses) => {
         {
           role: "system",
           content: `${assistantResponses} Given that I answered this question with ${userAnswer}, 
-            Generate a new multiple-choice question (answer choices: A, B, C, D)on ${topics[completedTopics]}
+            Generate a new multiple-choice question (answer choices: A, B, C, D) on ${topics[currentTopicIndex]}
             that will help increase my knowledge on the topic. Make answer choice ${correct_answer} the correct one, 
             the others wrong.`,
         },
@@ -319,7 +292,8 @@ app.post("/ask_new", async (req, res) => {
   try {
     const question = req.body.question;
     const answer = req.body.answer;
-    const response = await new_chat_gpt_question(question, answer);
+    const userId = req.body.userId;
+    const response = await new_chat_gpt_question(question, answer, userId);
     res.json({ assistantResponse: response });
   } catch (error) {
     console.error(error);
@@ -345,6 +319,7 @@ app.post("/start", async (req, res) => {
       const newUser = new User({
         username: userId,
         topicsPerformance: [],
+        completedTopics: 0, 
       });
 
       const savedUser = await newUser.save();
@@ -367,3 +342,4 @@ app.get("/test", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+

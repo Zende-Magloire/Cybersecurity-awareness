@@ -20,11 +20,12 @@ const userTopicPerformanceSchema = new mongoose.Schema({
   totalQuestionsAnswered: { type: Number, default: 0 },
 });
 
-// Schema for Users
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  topicsPerformance: [userTopicPerformanceSchema],
+  username: String,
+  topicsPerformance: [{ topic: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic' }, correctAnswers: Number, totalQuestionsAnswered: Number }],
+  completedTopics: { type: Number, default: 0 }, // Track completed topics
 });
+
 
 // Models
 const Question = mongoose.model('Question', questionSchema);

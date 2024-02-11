@@ -27,6 +27,8 @@ const Form = () => {
   const [questions, setQuestions] = useState(null);
   const [correct, setCorrect] = useState(null);
   const [passed, setPassed] = useState(false);
+  const [completedTopics, setCompletedTopics] = useState(0); // Define completedTopics state
+  const [trainingCompleted, setTrainingCompleted] = useState(false); // Define trainingCompleted state
 
   const sendAnswer = async (e) => {
     e.preventDefault();
@@ -36,11 +38,12 @@ const Form = () => {
         question: question,
         answer: selectedOption.label,
       });
-      console.log(selectedOption,"SelectionOption")
+      console.log(selectedOption, "SelectionOption");
       console.log(response.data, "dataFeedback");
       setFeedback(response?.data?.newAssistantResponse);
       setCorrect(response?.data.correct);
       setQuestions(response?.data.questions);
+      setCompletedTopics(response?.data.completedTopics); // Update completedTopics state
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while sending data.");
@@ -75,18 +78,22 @@ const Form = () => {
   }, [question, IdSubmitted]); // Empty dependency array ensures it runs only on mount
 
   useEffect(() => {
-    if (correct == 3 || questions == 5) {
+    if (correct === 3 || questions === 5) {
       setPassed(true);
     } else {
       setPassed(false);
     }
-  }, [questions, correct]);
+
+    if (passed && completedTopics === 5) {
+      setTrainingCompleted(true);
+    }
+  }, [questions, correct, passed, completedTopics]);
 
   const getNewQuestion = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post("http://localhost:3000/ask_new", {
+        userId: data, 
         question: question,
         answer: selectedOption ? selectedOption.label : null,
       });
@@ -94,6 +101,7 @@ const Form = () => {
       setQuestion(response?.data?.assistantResponse);
       setFeedback(null);
       setSelectedOption(null);
+      
       // Reset feedback when a new question is generated
 
       // Extract options for the new question
@@ -114,12 +122,12 @@ const Form = () => {
   };
 
   const submitId = async (e) => {
-    console.log(data)
+    console.log(data);
     e.preventDefault();
     if (data) {
       try {
-        await axios.post("http://localhost:3000/start",{
-          userId: data
+        await axios.post("http://localhost:3000/start", {
+          userId: data,
         });
         setIdSubmitted(true);
       } catch (error) {
@@ -150,7 +158,8 @@ const Form = () => {
         )}
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {passed && <p>Hurray! You passed the level!</p>}
+      {passed && !trainingCompleted && <p>Hurray! You passed the level!</p>}
+      {trainingCompleted && <p>Congratulations! You completed the training!</p>}
       {question && <p>{question}</p>}
       {options.length > 0 && (
         <Select
