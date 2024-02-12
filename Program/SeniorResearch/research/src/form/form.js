@@ -27,8 +27,8 @@ const Form = () => {
   const [questions, setQuestions] = useState(null);
   const [correct, setCorrect] = useState(null);
   const [passed, setPassed] = useState(false);
-  const [completedTopics, setCompletedTopics] = useState(0); // Define completedTopics state
-  const [trainingCompleted, setTrainingCompleted] = useState(false); // Define trainingCompleted state
+  const [completedTopics, setCompletedTopics] = useState(0); 
+  const [trainingCompleted, setTrainingCompleted] = useState(false); 
 
   const sendAnswer = async (e) => {
     e.preventDefault();
@@ -41,15 +41,15 @@ const Form = () => {
       console.log(selectedOption, "SelectionOption");
       console.log(response.data, "dataFeedback");
       setFeedback(response?.data?.newAssistantResponse);
-      setCorrect(response?.data.correct);
-      setQuestions(response?.data.questions);
-      setCompletedTopics(response?.data.completedTopics); // Update completedTopics state
+      setCorrect(response?.data.userProgress?.correctAnswers);
+      setQuestions(response?.data.userProgress?.totalQuestionsAnswered);
+      setCompletedTopics(response?.data.userProgress?.completedTopics); 
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while sending data.");
     }
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -78,13 +78,15 @@ const Form = () => {
   }, [question, IdSubmitted]); // Empty dependency array ensures it runs only on mount
 
   useEffect(() => {
-    if (correct === 3 || questions === 5) {
+    if (correct == 3 || questions == 5) {
       setPassed(true);
+      console.log("fail")
+
     } else {
       setPassed(false);
     }
 
-    if (passed && completedTopics === 5) {
+    if (passed && completedTopics == 5) {
       setTrainingCompleted(true);
     }
   }, [questions, correct, passed, completedTopics]);
@@ -139,29 +141,32 @@ const Form = () => {
 
   return (
     <div>
-      <form>
-        {IdSubmitted ? (
-          <p>Logged in as: {data}</p>
-        ) : (
-          <>
-            <label>
-              ID:
-              <input
-                type="text"
-                name="ID"
-                value={data}
-                onChange={(e) => setData(e.target.value)}
-              />
-            </label>
-            <input type="submit" onClick={submitId} />
-          </>
-        )}
-      </form>
+      {trainingCompleted ? (
+        <p>Congratulations! You completed the training!</p>
+      ) : (
+        <form>
+          {IdSubmitted ? (
+            <p>Logged in as: {data}</p>
+          ) : (
+            <>
+              <label>
+                ID:
+                <input
+                  type="text"
+                  name="ID"
+                  value={data}
+                  onChange={(e) => setData(e.target.value)}
+                />
+              </label>
+              <input type="submit" onClick={submitId} />
+            </>
+          )}
+        </form>
+      )}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {passed && !trainingCompleted && <p>Hurray! You passed the level!</p>}
-      {trainingCompleted && <p>Congratulations! You completed the training!</p>}
-      {question && <p>{question}</p>}
-      {options.length > 0 && (
+      {!trainingCompleted && passed && <p>Hurray! You passed the level!</p>}
+      {!trainingCompleted && question && <p>{question}</p>}
+      {!trainingCompleted && options.length > 0 && (
         <Select
           options={options}
           onChange={setSelectedOption}
@@ -170,12 +175,12 @@ const Form = () => {
           placeholder="Select an option"
         />
       )}
-      {selectedOption && !feedback && (
+      {!trainingCompleted && selectedOption && !feedback && (
         <button type="button" onClick={sendAnswer}>
           Submit
         </button>
       )}
-      {feedback && (
+      {!trainingCompleted && feedback && (
         <div>
           <p>{feedback}</p>
           <button type="button" onClick={getNewQuestion}>
@@ -186,5 +191,6 @@ const Form = () => {
     </div>
   );
 };
+
 
 export default Form;

@@ -156,7 +156,11 @@ async function updateUserTopicPerformance(userId, topicId, isCorrect) {
     }
 
     await user.save();
-    return topicPerformance.correctAnswers;
+    return {
+      correctAnswers: topicPerformance.correctAnswers,
+      totalQuestionsAnswered: topicPerformance.totalQuestionsAnswered,
+      completedTopics: user.completedTopics
+    };
   } catch (error) {
     console.error("Error updating user's topic performance:", error);
     return -1; // Error occurred
@@ -224,14 +228,14 @@ app.post("/feedback", async (req, res) => {
       const isCorrect = user_answer.startsWith(correct_answer);
       console.log(isCorrect, "isCorrect");
 
-      const correctAnswers = await updateUserTopicPerformance(
+      const userProgress = await updateUserTopicPerformance(
         currentDatabaseUser._id,
         topicToUse._id,
         isCorrect
       );
-      console.log("correctAnswer", correctAnswers);
-
-      res.json({ newAssistantResponse, correctAnswers });
+      console.log("progress", userProgress);
+      
+      res.json({ newAssistantResponse, userProgress });
     } else {
       console.error("User not found");
       res.status(404).json({ error: "User not found" });
