@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
 
+//loading
 const Loading = () => {
   return (
     <div
@@ -21,6 +22,7 @@ const Loading = () => {
   );
 };
 
+//extract question options
 function extractOptions(text) {
   const regex =
     /[A-Z]\) [^]+?(?=[A-Z]\)|[A-Z]\.|\n|$)|[A-Z]\. [^]+?(?=[A-Z]\)|[A-Z]\.|\n|$)/g;
@@ -49,6 +51,7 @@ const Form = () => {
   const [completedTopics, setCompletedTopics] = useState(0);
   const [trainingCompleted, setTrainingCompleted] = useState(false);
 
+  //get feedback
   const sendAnswer = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -58,8 +61,8 @@ const Form = () => {
         question: question,
         answer: selectedOption.label,
       });
-      console.log(selectedOption, "SelectionOption");
-      console.log(response.data, "dataFeedback");
+    //  console.log(selectedOption, "SelectionOption");
+    //  console.log(response.data, "dataFeedback");
       setFeedback(response?.data?.newAssistantResponse);
       setCorrect(response?.data.userProgress?.correctAnswers);
       setQuestions(response?.data.userProgress?.totalQuestionsAnswered);
@@ -72,6 +75,7 @@ const Form = () => {
     }
   };
 
+  //ask initial question
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -102,6 +106,7 @@ const Form = () => {
     }
   }, [question, IdSubmitted]); 
 
+  //check if user passed
   useEffect(() => {
     if (correct == 3 || questions == 5) {
       setPassed(true);
@@ -114,6 +119,7 @@ const Form = () => {
     }
   }, [questions, correct, passed, completedTopics]);
 
+  //get new question
   const getNewQuestion = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -123,7 +129,7 @@ const Form = () => {
         question: question,
         answer: selectedOption ? selectedOption.label : null,
       });
-      console.log(response.data);
+    //  console.log(response.data);
       setQuestion(response?.data?.assistantResponse);
       setFeedback(null);
       setSelectedOption(null);
@@ -147,7 +153,7 @@ const Form = () => {
   };
 
   const submitId = async (e) => {
-    console.log(data);
+    //console.log(data);
     e.preventDefault();
     if (data) {
       try {

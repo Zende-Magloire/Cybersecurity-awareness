@@ -31,15 +31,6 @@ db.once("open", () => {
   console.log("DB started successfully");
 });
 
-// const userQuizResultSchema = new mongoose.Schema({
-//   userId: String,
-//   correct: Number,
-//   questions: Number,
-//   topic: String,
-// });
-
-// const UserQuizResult = mongoose.model("UserQuizResult", userQuizResultSchema);
-
 const topics = [
   "password security",
   "phishing awareness",
@@ -52,7 +43,7 @@ let questions = 0;
 let answers = ["A", "B", "C", "D"];
 let correct_answer = null;
 
-const chat_gpt_question = async () => { 
+const chat_gpt_question = async () => {
   try {
     const randomIndex = Math.floor(Math.random() * answers.length);
 
@@ -91,7 +82,7 @@ const chat_gpt_question = async () => {
 
 app.get("/ask", async (req, res) => {
   try {
-    const response = await chat_gpt_question(req.query.userId); // Pass userId to the function
+    const response = await chat_gpt_question(req.query.userId);
     res.json({ assistantResponse: response });
   } catch (error) {
     console.error(error);
@@ -102,18 +93,20 @@ app.get("/ask", async (req, res) => {
 const createNewTopic = async (topicName, userId) => {
   try {
     // Find if a topic with the same name exists for the current user
-    let existingTopic = await Topic.findOne({ userId: userId, name: topicName });
+    let existingTopic = await Topic.findOne({
+      userId: userId,
+      name: topicName,
+    });
 
     if (existingTopic) {
       // If the topic exists, return it or update it if necessary
       console.log("Topic already exists for the user, updating...");
-      // Perform any necessary update here, if required
       return existingTopic;
     } else {
       // If the topic doesn't exist, create a new one
       console.log("Creating new topic...");
       const newTopic = new Topic({
-        userId: userId, // Include userId when creating the new topic
+        userId: userId,
         name: topicName,
         questions: [],
       });
@@ -150,8 +143,11 @@ async function updateUserTopicPerformance(userId, topicId, isCorrect) {
       if (isCorrect) {
         topicPerformance.correctAnswers++;
       }
-      if (topicPerformance.correctAnswers === 3 || topicPerformance.totalQuestionsAnswered === 5) {
-        user.completedTopics++; // Increment completedTopics for the user
+      if (
+        topicPerformance.correctAnswers === 3 ||
+        topicPerformance.totalQuestionsAnswered === 5
+      ) {
+        user.completedTopics++;
       }
     }
 
@@ -159,18 +155,18 @@ async function updateUserTopicPerformance(userId, topicId, isCorrect) {
     return {
       correctAnswers: topicPerformance.correctAnswers,
       totalQuestionsAnswered: topicPerformance.totalQuestionsAnswered,
-      completedTopics: user.completedTopics
+      completedTopics: user.completedTopics,
     };
   } catch (error) {
     console.error("Error updating user's topic performance:", error);
-    return -1; // Error occurred
+    return -1;
   }
 }
 
 app.post("/feedback", async (req, res) => {
   console.log(req.body, "feedback");
   try {
-    const { question, answer, userId } = req.body; // Extract userId from req.body
+    const { question, answer, userId } = req.body;
 
     const userResponse = await openai.chat.completions.create({
       model: "gpt-4",
@@ -195,16 +191,15 @@ app.post("/feedback", async (req, res) => {
     const newAssistantResponse = userResponse.choices[0].message.content;
     console.log("\n" + newAssistantResponse);
 
-    // const currentDatabaseUser = await User.findOne({ _id: userId }); // Find user by ID
     const currentDatabaseUser = await User.findOne({ username: userId });
 
-    console.log(currentDatabaseUser, "user id");
+    // console.log(currentDatabaseUser, "user id");
     let topicToUse = null;
 
     if (currentDatabaseUser) {
       const topicName = topics[currentDatabaseUser.completedTopics];
       topicToUse = await Topic.findOne({
-        userId: currentDatabaseUser._id, // Associate topic with current user
+        userId: currentDatabaseUser._id,
         name: topicName,
       });
 
@@ -216,25 +211,28 @@ app.post("/feedback", async (req, res) => {
         text: question,
       });
 
-      console.log("Question saved:", savedQuestion);
-      console.log("topicToUse", topicToUse);
+      console.log("Question saved");
+      //console.log("Question saved:", savedQuestion);
+      console.log("topicToUse");
+      //console.log("topicToUse", topicToUse);
 
       topicToUse.questions.push(savedQuestion);
 
       await topicToUse.save();
-      console.log("Topic saved:", topicToUse);
+      console.log("topic saved");
+      //console.log("Topic saved:", topicToUse);
 
       const user_answer = answer;
       const isCorrect = user_answer.startsWith(correct_answer);
-      console.log(isCorrect, "isCorrect");
+      // console.log(isCorrect, "isCorrect");
 
       const userProgress = await updateUserTopicPerformance(
         currentDatabaseUser._id,
         topicToUse._id,
         isCorrect
       );
-      console.log("progress", userProgress);
-      
+      // console.log("progress", userProgress);
+
       res.json({ newAssistantResponse, userProgress });
     } else {
       console.error("User not found");
@@ -246,18 +244,21 @@ app.post("/feedback", async (req, res) => {
   }
 });
 
-
-const new_chat_gpt_question = async (userAnswer, assistantResponses, userId) => { 
+const new_chat_gpt_question = async (
+  userAnswer,
+  assistantResponses,
+  userId
+) => {
   try {
     // Retrieve the user from the database
-    console.log(userId)
+    //console.log(userId)
     const currentUser = await User.findOne({ username: userId });
 
-console.log("current",currentUser)
+    //console.log("current", currentUser);
     // Use the completed topics count to determine the current topic
     const currentTopicIndex = currentUser.completedTopics;
     const currentTopicName = topics[currentTopicIndex];
-    
+
     const randomIndex = Math.floor(Math.random() * answers.length);
 
     const randomString = answers[randomIndex];
@@ -323,7 +324,7 @@ app.post("/start", async (req, res) => {
       const newUser = new User({
         username: userId,
         topicsPerformance: [],
-        completedTopics: 0, 
+        completedTopics: 0,
       });
 
       const savedUser = await newUser.save();
@@ -346,4 +347,3 @@ app.get("/test", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
