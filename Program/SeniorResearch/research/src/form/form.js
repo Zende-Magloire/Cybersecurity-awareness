@@ -1,7 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
-import Loading from "../loading/loading";
+
+const Loading = () => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100px",
+        width: "100%",
+        fontSize: "20px",
+        fontWeight: "bold",
+        color: "#333",
+      }}
+    >
+      AI is generating...
+    </div>
+  );
+};
 
 function extractOptions(text) {
   const regex =
@@ -23,15 +41,17 @@ const Form = () => {
   const [error, setError] = useState("");
   const [question, setQuestion] = useState(null);
   const [feedback, setFeedback] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [IdSubmitted, setIdSubmitted] = useState(false);
   const [questions, setQuestions] = useState(null);
   const [correct, setCorrect] = useState(null);
   const [passed, setPassed] = useState(false);
-  const [completedTopics, setCompletedTopics] = useState(0); 
-  const [trainingCompleted, setTrainingCompleted] = useState(false); 
+  const [completedTopics, setCompletedTopics] = useState(0);
+  const [trainingCompleted, setTrainingCompleted] = useState(false);
 
   const sendAnswer = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post("http://localhost:3000/feedback", {
         userId: data,
@@ -43,15 +63,18 @@ const Form = () => {
       setFeedback(response?.data?.newAssistantResponse);
       setCorrect(response?.data.userProgress?.correctAnswers);
       setQuestions(response?.data.userProgress?.totalQuestionsAnswered);
-      setCompletedTopics(response?.data.userProgress?.completedTopics); 
+      setCompletedTopics(response?.data.userProgress?.completedTopics);
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while sending data.");
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get("http://localhost:3000/ask");
         const dataAssistance = response.data.assistantResponse;
@@ -68,6 +91,8 @@ const Form = () => {
       } catch (error) {
         console.error("Error:", error);
         setError("An error occurred while fetching data.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -75,13 +100,11 @@ const Form = () => {
     if (!question && IdSubmitted) {
       fetchData();
     }
-  }, [question, IdSubmitted]); // Empty dependency array ensures it runs only on mount
+  }, [question, IdSubmitted]); 
 
   useEffect(() => {
     if (correct == 3 || questions == 5) {
       setPassed(true);
-      console.log("fail")
-
     } else {
       setPassed(false);
     }
@@ -93,9 +116,10 @@ const Form = () => {
 
   const getNewQuestion = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post("http://localhost:3000/ask_new", {
-        userId: data, 
+        userId: data,
         question: question,
         answer: selectedOption ? selectedOption.label : null,
       });
@@ -103,10 +127,7 @@ const Form = () => {
       setQuestion(response?.data?.assistantResponse);
       setFeedback(null);
       setSelectedOption(null);
-      
-      // Reset feedback when a new question is generated
 
-      // Extract options for the new question
       const extractedOptions = extractOptions(
         response?.data?.assistantResponse
       );
@@ -120,6 +141,8 @@ const Form = () => {
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while sending data.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -141,56 +164,76 @@ const Form = () => {
 
   return (
     <div>
-      {trainingCompleted ? (
-        <p>Congratulations! You completed the training!</p>
+      {loading ? (
+        <Loading />
       ) : (
-        <form>
-          {IdSubmitted ? (
-            <p>Logged in as: {data}</p>
+        <>
+          {trainingCompleted ? (
+            <p style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100px",
+              width: "100%",
+              fontSize: "20px",
+              fontWeight: "bold",
+              color: "blue",
+              }}>
+                Congratulations! You completed the training!</p>
           ) : (
-            <>
-              <label>
-                ID:
-                <input
-                  type="text"
-                  name="ID"
-                  value={data}
-                  onChange={(e) => setData(e.target.value)}
-                />
-              </label>
-              <input type="submit" onClick={submitId} />
-            </>
+            <form>
+              {IdSubmitted ? (
+                <p>Logged in as: {data}</p>
+              ) : (
+                <>
+                  <label>
+                    ID:
+                    <input
+                      type="text"
+                      name="ID"
+                      value={data}
+                      onChange={(e) => setData(e.target.value)}
+                    />
+                  </label>
+                  <input type="submit" onClick={submitId} />
+                </>
+              )}
+            </form>
           )}
-        </form>
-      )}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {!trainingCompleted && passed && <p>Hurray! You passed the level!</p>}
-      {!trainingCompleted && question && <p>{question}</p>}
-      {!trainingCompleted && options.length > 0 && (
-        <Select
-          options={options}
-          onChange={setSelectedOption}
-          value={selectedOption}
-          isClearable
-          placeholder="Select an option"
-        />
-      )}
-      {!trainingCompleted && selectedOption && !feedback && (
-        <button type="button" onClick={sendAnswer}>
-          Submit
-        </button>
-      )}
-      {!trainingCompleted && feedback && (
-        <div>
-          <p>{feedback}</p>
-          <button type="button" onClick={getNewQuestion}>
-            Next Question
-          </button>
-        </div>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+            {!trainingCompleted && passed && !feedback &&
+              <p style={{
+                color: "blue", fontSize: "15px", fontWeight: "bold",
+              }}>
+                Hurray! You passed the level! You're making great progress!
+                Let's dive into a new topic...</p>}
+          {!trainingCompleted && question && <p>{question}</p>}
+          {!trainingCompleted && options.length > 0 && (
+            <Select
+              options={options}
+              onChange={setSelectedOption}
+              value={selectedOption}
+              isClearable
+              placeholder="Select an option"
+            />
+          )}
+          {!trainingCompleted && selectedOption && !feedback && (
+            <button type="button" onClick={sendAnswer}>
+              Submit
+            </button>
+          )}
+          {!trainingCompleted && feedback && (
+            <div>
+              <p>{feedback}</p>
+              <button type="button" onClick={getNewQuestion}>
+                Next Question
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 };
-
 
 export default Form;
