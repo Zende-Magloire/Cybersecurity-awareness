@@ -272,7 +272,7 @@ const new_chat_gpt_question = async (
         {
           role: "system",
           content: `${assistantResponses} Given that I answered this question with ${userAnswer}, 
-            Generate a new multiple-choice question (answer choices: A, B, C, D) on ${topics[currentTopicIndex]}
+            Generate a new multiple-choice question (answer choices: A, B, C, D) on ${currentTopicName}
             that will help increase my knowledge on the topic. Make answer choice ${correct_answer} the correct one, 
             the others wrong.`,
         },
