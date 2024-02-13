@@ -43,8 +43,17 @@ let questions = 0;
 let answers = ["A", "B", "C", "D"];
 let correct_answer = null;
 
-const chat_gpt_question = async () => {
+const chat_gpt_question = async (userId) => {
   try {
+     // Retrieve the user from the database
+    //console.log(userId)
+    const currentUser = await User.findOne({ username: userId });
+
+    //console.log("current", currentUser);
+    // Use the completed topics count to determine the current topic
+    const currentTopicIndex = currentUser.completedTopics;
+    const currentTopicName = topics[currentTopicIndex];
+
     const randomIndex = Math.floor(Math.random() * answers.length);
 
     const randomString = answers[randomIndex];
@@ -60,7 +69,7 @@ const chat_gpt_question = async () => {
           role: "system",
           content: `You are a cybersecurity specialist educating college students on cybersecurity 
             awareness. Let's begin by asking a multiple-choice question
-            (answer choices: A, B, C, D) on the topic of ${topics[completedTopics]}.
+            (answer choices: A, B, C, D) on the topic of ${currentTopicName}.
             Make answer choice ${correct_answer} the correct one, the others wrong.`,
         },
       ],
@@ -82,13 +91,15 @@ const chat_gpt_question = async () => {
 
 app.get("/ask", async (req, res) => {
   try {
-    const response = await chat_gpt_question(req.query.userId);
+    const userId = req.query.userId;
+    const response = await chat_gpt_question(userId); 
     res.json({ assistantResponse: response });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 const createNewTopic = async (topicName, userId) => {
   try {

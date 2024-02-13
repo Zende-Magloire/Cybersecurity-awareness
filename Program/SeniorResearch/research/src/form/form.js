@@ -22,7 +22,7 @@ const Loading = () => {
   );
 };
 
-//extract question options
+//extract options
 function extractOptions(text) {
   const regex =
     /[A-Z]\) [^]+?(?=[A-Z]\)|[A-Z]\.|\n|$)|[A-Z]\. [^]+?(?=[A-Z]\)|[A-Z]\.|\n|$)/g;
@@ -35,6 +35,7 @@ function extractOptions(text) {
     return "No options found";
   }
 }
+
 
 const Form = () => {
   const [data, setData] = useState("");
@@ -61,8 +62,8 @@ const Form = () => {
         question: question,
         answer: selectedOption.label,
       });
-    //  console.log(selectedOption, "SelectionOption");
-    //  console.log(response.data, "dataFeedback");
+      //  console.log(selectedOption, "SelectionOption");
+      //  console.log(response.data, "dataFeedback");
       setFeedback(response?.data?.newAssistantResponse);
       setCorrect(response?.data.userProgress?.correctAnswers);
       setQuestions(response?.data.userProgress?.totalQuestionsAnswered);
@@ -80,12 +81,16 @@ const Form = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:3000/ask");
+        const response = await axios.get("http://localhost:3000/ask", {
+          params: {
+            userId: data 
+          }
+        });
         const dataAssistance = response.data.assistantResponse;
         setQuestion(dataAssistance);
-
+  
         const extractedOptions = extractOptions(dataAssistance);
-
+  
         setOptions(
           extractedOptions.map((option, index) => ({
             label: option,
@@ -99,12 +104,13 @@ const Form = () => {
         setLoading(false);
       }
     };
-
+  
     // Fetch data only if there's no existing question
     if (!question && IdSubmitted) {
       fetchData();
     }
-  }, [question, IdSubmitted]); 
+  }, [question, IdSubmitted, data]);
+  
 
   //check if user passed
   useEffect(() => {
@@ -129,7 +135,7 @@ const Form = () => {
         question: question,
         answer: selectedOption ? selectedOption.label : null,
       });
-    //  console.log(response.data);
+      //  console.log(response.data);
       setQuestion(response?.data?.assistantResponse);
       setFeedback(null);
       setSelectedOption(null);
@@ -175,17 +181,20 @@ const Form = () => {
       ) : (
         <>
           {trainingCompleted ? (
-            <p style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100px",
-              width: "100%",
-              fontSize: "20px",
-              fontWeight: "bold",
-              color: "blue",
-              }}>
-                Congratulations! You completed the training!</p>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100px",
+                width: "100%",
+                fontSize: "20px",
+                fontWeight: "bold",
+                color: "blue",
+              }}
+            >
+              Congratulations! You completed the training!
+            </p>
           ) : (
             <form>
               {IdSubmitted ? (
@@ -207,12 +216,18 @@ const Form = () => {
             </form>
           )}
           {error && <p style={{ color: "red" }}>{error}</p>}
-            {!trainingCompleted && passed && !feedback &&
-              <p style={{
-                color: "blue", fontSize: "15px", fontWeight: "bold",
-              }}>
-                Hurray! You passed the level! You're making great progress!
-                Let's dive into a new topic...</p>}
+          {!trainingCompleted && passed && !feedback && (
+            <p
+              style={{
+                color: "blue",
+                fontSize: "15px",
+                fontWeight: "bold",
+              }}
+            >
+              Hurray! You passed the level! You're making great progress! Let's
+              dive into a new topic...
+            </p>
+          )}
           {!trainingCompleted && question && <p>{question}</p>}
           {!trainingCompleted && options.length > 0 && (
             <Select
