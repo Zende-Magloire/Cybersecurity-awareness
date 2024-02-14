@@ -228,11 +228,9 @@ const Form = () => {
           )}
           {!trainingCompleted && question && (
             <div>
-              {question.split("\n").map((line, index) => (
-                <p key={index}>
-                  {index === 0 ? <strong>{line}</strong> : line}
-                </p>
-              ))}
+              <p>
+                <strong>{question.split("\n")[0]}</strong>
+              </p>
             </div>
           )}
           {!trainingCompleted && options.length > 0 && (
