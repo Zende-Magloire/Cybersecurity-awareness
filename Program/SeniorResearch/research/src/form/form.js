@@ -25,7 +25,7 @@ const Loading = () => {
 //extract options
 function extractOptions(text) {
   const regex =
-  /[A-D][\).] [^]+?(?=[A-D][\).]|\n|$)|[A-D]\. [^]+?(?=[A-D][\).]|\n|$)/g;
+    /[A-D][\).] [^]+?(?=[A-D][\).]|\n|$)|[A-D]\. [^]+?(?=[A-D][\).]|\n|$)/g;
 
   const options = text.match(regex);
 
@@ -35,7 +35,6 @@ function extractOptions(text) {
     return "No options found";
   }
 }
-
 
 const Form = () => {
   const [data, setData] = useState("");
@@ -83,14 +82,14 @@ const Form = () => {
       try {
         const response = await axios.get("http://localhost:3000/ask", {
           params: {
-            userId: data 
-          }
+            userId: data,
+          },
         });
         const dataAssistance = response.data.assistantResponse;
         setQuestion(dataAssistance);
-  
+
         const extractedOptions = extractOptions(dataAssistance);
-  
+
         setOptions(
           extractedOptions.map((option, index) => ({
             label: option,
@@ -104,13 +103,12 @@ const Form = () => {
         setLoading(false);
       }
     };
-  
+
     // Fetch data only if there's no existing question
     if (!question && IdSubmitted) {
       fetchData();
     }
   }, [question, IdSubmitted, data]);
-  
 
   //check if user passed
   useEffect(() => {
@@ -228,7 +226,15 @@ const Form = () => {
               dive into a new topic...
             </p>
           )}
-          {!trainingCompleted && question && <p>{question}</p>}
+          {!trainingCompleted && question && (
+            <div>
+              {question.split("\n").map((line, index) => (
+                <p key={index}>
+                  {index === 0 ? <strong>{line}</strong> : line}
+                </p>
+              ))}
+            </div>
+          )}
           {!trainingCompleted && options.length > 0 && (
             <Select
               options={options}
