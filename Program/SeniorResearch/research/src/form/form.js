@@ -25,7 +25,7 @@ const Loading = () => {
 //extract options
 function extractOptions(text) {
   const regex =
-    /[A-Z]\) [^]+?(?=[A-Z]\)|[A-Z]\.|\n|$)|[A-Z]\. [^]+?(?=[A-Z]\)|[A-Z]\.|\n|$)/g;
+  /[A-D][\).] [^]+?(?=[A-D][\).]|\n|$)|[A-D]\. [^]+?(?=[A-D][\).]|\n|$)/g;
 
   const options = text.match(regex);
 
